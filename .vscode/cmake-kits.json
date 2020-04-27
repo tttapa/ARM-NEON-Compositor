@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Raspberry Pi 3 (AArch64)",
+        "toolchainFile": "${env:HOME}/GitHub/RPi-Cpp-Toolchain/cmake/aarch64-rpi3-linux-gnu.cmake"
+    },
+    {
+        "name": "Raspberry Pi 3 (ARMv8)",
+        "toolchainFile": "${env:HOME}/GitHub/RPi-Cpp-Toolchain/cmake/armv8-rpi3-linux-gnueabihf.cmake"
+    },
+    {
+        "name": "Raspberry Pi (ARMv6)",
+        "toolchainFile": "${env:HOME}/GitHub/RPi-Cpp-Toolchain/cmake/armv6-rpi-linux-gnueabihf.cmake"
+    }
+]
