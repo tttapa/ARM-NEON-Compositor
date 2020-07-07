@@ -9,12 +9,20 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
+
     - uses: actions/cache@v2
       with:
         path: "/tmp/gtest"
         key: ${{ runner.os }}-${{ hashFiles('scripts/ci/install-gtest.sh') }}
     - name: Install Google Test
       run: ./scripts/ci/install-gtest.sh /tmp/gtest
+
+    - uses: actions/cache@v2
+      with:
+        path: "/tmp/neon2x86"
+        key: ${{ runner.os }}-${{ hashFiles('scripts/ci/install-neon2x86.sh') }}
+    - name: Install ARM_NEON_2_x86_SSE
+      run: ./scripts/ci/install-neon2x86.sh /tmp/neon2x86
       
     - name: Create build directory
       run: mkdir -p build
@@ -24,7 +32,7 @@ jobs:
       env:
         CC: gcc-9
         CXX: g++-9
-        CMAKE_PREFIX_PATH: "/tmp/gtest"
+        CMAKE_PREFIX_PATH: "/tmp/gtest:/tmp/neon2x86"
     - name: Build
       run: make -j4
       working-directory: build
