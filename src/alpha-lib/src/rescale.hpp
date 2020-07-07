@@ -13,13 +13,13 @@
  * This is a flooring division by 256, which is close enough to 255, but the
  * result may be one bit too small.
  */
-inline static uint8x8_t div256_floor(uint16x8_t x) { return vshrn_n_u16(x, 8); }
+inline uint8x8_t div256_floor(uint16x8_t x) { return vshrn_n_u16(x, 8); }
 
 /**
  * This is a rounding division by 256, which is close enough to 255, but the
  * result may be one bit too small.
  */
-inline static uint8x8_t div256_round(uint16x8_t x) {
+inline uint8x8_t div256_round(uint16x8_t x) {
     return vrshrn_n_u16(x, 8);
 }
 
@@ -34,7 +34,7 @@ inline static uint8x8_t div256_round(uint16x8_t x) {
  * This is an exact flooring division by 255, this is the correct divisor,
  * but requires a little bit more code, and doesn't round the result.
  */
-inline static uint8x8_t div255_floor(uint16x8_t x) {
+inline uint8x8_t div255_floor(uint16x8_t x) {
     // Multiply by 0x8081 as 32-bit integers (high and low elements separately)
     // 256×256×128/0x8081 ≃ 255
     uint32x4_t h = vmull_high_n_u16(x, 0x8081);
@@ -54,7 +54,7 @@ inline static uint8x8_t div255_floor(uint16x8_t x) {
  * 
  * This function is just as cheap as the @ref div255_floor function.
  */
-inline static uint8x8_t div255_round_approx(uint16x8_t x) {
+inline uint8x8_t div255_round_approx(uint16x8_t x) {
     // Multiply by 0x8081 as 32-bit integers (high and low elements separately)
     // 256×256×128/0x8081 ≃ 255
     uint32x4_t h = vmull_high_n_u16(x, 0x8081);
@@ -73,7 +73,7 @@ inline static uint8x8_t div255_round_approx(uint16x8_t x) {
  * The result is incorrect for very large numbers where the quotient would 
  * overflow an 8-bit integer.
  */
-inline static uint8x8_t div255_round(uint16x8_t x) {
+inline uint8x8_t div255_round(uint16x8_t x) {
     // Add the rounding constant
     x = vaddq_u16(x, vdupq_n_u16(1 << 7));
     // Multiply by 0x8080 as 32-bit integers (high and low elements separately)
@@ -91,7 +91,7 @@ inline static uint8x8_t div255_round(uint16x8_t x) {
  * This is an exact flooring division by 255, this is the correct divisor,
  * but requires a little bit more code, and doesn't round the result.
  */
-inline static uint8x8_t div255_floor(uint16x8_t x) {
+inline uint8x8_t div255_floor(uint16x8_t x) {
     // Multiply by 0x8081 as 32-bit integers (high and low elements separately)
     // 256×256×128/0x8081 ≃ 255
     uint32x4_t h = vmull_n_u16(vget_high_u16(x), 0x8081);
@@ -111,7 +111,7 @@ inline static uint8x8_t div255_floor(uint16x8_t x) {
  * 
  * This function is just as cheap as the @ref div255_floor function.
  */
-inline static uint8x8_t div255_round_approx(uint16x8_t x) {
+inline uint8x8_t div255_round_approx(uint16x8_t x) {
     // Multiply by 0x8081 as 32-bit integers (high and low elements separately)
     // 256×256×128/0x8081 ≃ 255
     uint32x4_t h = vmull_n_u16(vget_high_u16(x), 0x8081);
@@ -130,7 +130,7 @@ inline static uint8x8_t div255_round_approx(uint16x8_t x) {
  * The result is incorrect for very large numbers where the quotient would 
  * overflow an 8-bit integer.
  */
-inline static uint8x8_t div255_round(uint16x8_t x) {
+inline uint8x8_t div255_round(uint16x8_t x) {
     // Add the rounding constant
     x = vaddq_u16(x, vdupq_n_u16(1 << 7));
     // Multiply by 0x8080 as 32-bit integers (high and low elements separately)
@@ -150,19 +150,19 @@ inline static uint8x8_t div255_round(uint16x8_t x) {
  * This is a flooring division by 256, which is close enough to 255, but the
  * result may be one bit too small.
  */
-inline static uint8_t div256_floor(uint16_t x) { return x >> 8; }
+inline uint8_t div256_floor(uint16_t x) { return x >> 8; }
 
 /**
  * This is a rounding division by 256, which is close enough to 255, but the
  * result may be one bit too small.
  */
-inline static uint8_t div256_round(uint16_t x) { return (x + (1 << 7)) >> 8; }
+inline uint8_t div256_round(uint16_t x) { return (x + (1 << 7)) >> 8; }
 
 /**
  * This is an exact flooring division by 255, this is the correct divisor,
  * but requires a little bit more code, and doesn't round the result.
  */
-inline static uint8_t div255_floor(uint16_t x) {
+inline uint8_t div255_floor(uint16_t x) {
     uint32_t h = uint32_t(x) * 0x8081;
     return h >> 23;
 }
@@ -172,7 +172,7 @@ inline static uint8_t div255_floor(uint16_t x) {
  * and the result is rounded correctly in 100% of the cases.
  * (Compared to `std::round(x / 255.0)`)
  */
-inline static uint8_t div255_round(uint16_t x) {
+inline uint8_t div255_round(uint16_t x) {
     x += 1 << 7;
     uint32_t h = uint32_t(x) * 0x101;
     return h >> 16;
@@ -181,7 +181,7 @@ inline static uint8_t div255_round(uint16_t x) {
 /**
  * Uses div255_round, and is exact.
  */
-inline static uint8_t div255_round_approx(uint16_t x) {
+inline uint8_t div255_round_approx(uint16_t x) {
     return div255_round(x);
 }
 
@@ -197,7 +197,7 @@ inline static uint8_t div255_round_approx(uint16_t x) {
  *          The rescaling mode to use. See @ref RescaleType.
  */
 template <RescaleType rescale_type = RescaleType::Div255_Round>
-inline static uint8x8_t rescale(uint16x8_t x) {
+inline uint8x8_t rescale(uint16x8_t x) {
     switch (rescale_type) {
         case RescaleType::Div256_Floor: return div256_floor(x);
         case RescaleType::Div256_Round: return div256_round(x);
@@ -211,7 +211,7 @@ inline static uint8x8_t rescale(uint16x8_t x) {
 
 /// @copydoc rescale(uint16x8_t)
 template <RescaleType rescale_type = RescaleType::Div255_Round>
-inline static uint8_t rescale(uint16_t x) {
+inline uint8_t rescale(uint16_t x) {
     switch (rescale_type) {
         case RescaleType::Div256_Floor: return div256_floor(x);
         case RescaleType::Div256_Round: return div256_round(x);
