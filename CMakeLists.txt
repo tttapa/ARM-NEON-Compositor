@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 2.8.12)
-
-project(ARM-NEON-Compositor CXX)
+cmake_minimum_required(VERSION 3.11)
+project(ARM-NEON-Compositor VERSION 0.0.9 LANGUAGES CXX)
 
 # Unit tests
 # ---------------------------------------------------------------------------- #
@@ -92,3 +91,16 @@ if (DOXYGEN_FOUND)
         Doxygen::doxygen
         WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/doxygen")
 endif()
+
+# Packaging
+# ---------------------------------------------------------------------------- #
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_VERSION_MAJOR "${ARM-NEON-Compositor_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${ARM-NEON-Compositor_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${ARM-NEON-Compositor_VERSION_PATCH}")
+set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+SET(CPACK_GENERATOR "DEB;TGZ")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Pieter P")
+include(CPack)
