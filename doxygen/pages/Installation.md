@@ -69,9 +69,9 @@ cmake_minimum_required(VERSION 3.16)
 project(Project)
 
 # Find the library you just installed:
-find_package(RPi-NEON-Compositor REQUIRED)
+find_package(ARM-NEON-Compositor REQUIRED)
 
 add_executable(main main.cpp)
 # Link your executable with the library:
-target_link_libraries(main PRIVATE RPi-NEON-Compositor::alpha-lib)
+target_link_libraries(main PRIVATE ARM-NEON-Compositor::alpha-lib)
 ```

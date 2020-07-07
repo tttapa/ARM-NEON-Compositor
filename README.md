@@ -1,5 +1,5 @@
-[![Build Status](https://github.com/tttapa/RPi-OpenCV-NEON-Compositor/workflows/CI%20Tests/badge.svg)](https://github.com/tttapa/RPi-OpenCV-NEON-Compositor/actions)
-[![GitHub](https://img.shields.io/github/stars/tttapa/RPi-OpenCV-NEON-Compositor?label=GitHub&logo=github)](https://github.com/tttapa/RPi-OpenCV-NEON-Compositor)
+[![Build Status](https://github.com/tttapa/ARM-NEON-Compositor/workflows/CI%20Tests/badge.svg)](https://github.com/tttapa/ARM-NEON-Compositor/actions)
+[![GitHub](https://img.shields.io/github/stars/tttapa/ARM-NEON-Compositor?label=GitHub&logo=github)](https://github.com/tttapa/ARM-NEON-Compositor)
 
 # Raspberry Pi NEON Compositor
 
@@ -8,9 +8,9 @@ Uses NEON SIMD instructions to overlay a foreground image with an alpha channel
 
 ## Documentation
 
-[**Documentation**](https://tttapa.github.io/RPi-OpenCV-NEON-Compositor/Doxygen/index.html)
+[**Documentation**](https://tttapa.github.io/ARM-NEON-Compositor/Doxygen/index.html)
 
-The [**modules**](https://tttapa.github.io/RPi-OpenCV-NEON-Compositor/Doxygen/modules.html)
+The [**modules**](https://tttapa.github.io/ARM-NEON-Compositor/Doxygen/modules.html)
 page is the best place to start.
 
 You can find more in-depth explanations of the NEON intrinsics used by this 

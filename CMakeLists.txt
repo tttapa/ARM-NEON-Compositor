@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.12)
 
-project(RPi-NEON-Compositor CXX)
+project(ARM-NEON-Compositor CXX)
 
 # Unit tests
 # ---------------------------------------------------------------------------- #
