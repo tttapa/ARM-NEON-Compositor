@@ -38,6 +38,7 @@ div.contents > div.textblock > hr {
 }
 .title {
     font-size: 2em;
+    word-wrap: break-word;
 }
 * {
     max-width: 100%;

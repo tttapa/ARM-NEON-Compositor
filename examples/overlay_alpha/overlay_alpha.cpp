@@ -1,4 +1,20 @@
-/// @example examples/overlay_alpha/overlay_alpha.cpp
+/** 
+ * @example examples/overlay_alpha/overlay_alpha.cpp
+ * 
+ * Simple tool that overlays a transparent foreground image onto a background
+ * image.  
+ * The first two arguments are the background and foreground images 
+ * respectively. Optional arguments three and four are the x and y position that 
+ * determine where to overlay the foreground image relative to the background.
+ * 
+ * For example:
+ * 
+ * |         Background          |              Foreground             |                   Result                   |
+ * |:---------------------------:|:-----------------------------------:|:------------------------------------------:|
+ * | ![](Machu-Picchu.thumb.jpg) | ![](Overlay-Machu-Picchu.thumb.png) | ![](Overlay-Machu-Picchu-Output.thumb.jpg) |
+ * 
+ * Written by PieterP, 2020-07-07
+ */
 
 #include <algorithm> // std::min, max
 #include <cassert>   // assert
