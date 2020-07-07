@@ -18,8 +18,9 @@ library here: [**Raspberry-Pi/NEON**](https://tttapa.github.io/Pages/Raspberry-P
 
 ## Examples
 
-The `overlay_alpha` example overlays a foreground image with an alpha channel 
-onto a background image, for example:
+The [`overlay_alpha`](https://tttapa.github.io/ARM-NEON-Compositor/Doxygen/dc/d0e/examples_2overlay_alpha_2overlay_alpha_8cpp-example.html)
+example overlays a foreground image with an alpha channel onto a background
+image, for example:
 
 | Background | Foreground | Result |
 |:----------:|:----------:|:------:|
