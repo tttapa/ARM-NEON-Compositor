@@ -1,4 +1,7 @@
 build
 output*.png
-images
+images/*
+!images/Machu-Picchu.jpg
+!images/Overlay-Machu-Picchu.png
+!images/Overlay-Machu-Picchu.svg
 a.out

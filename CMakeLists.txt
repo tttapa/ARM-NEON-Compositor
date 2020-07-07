@@ -2,9 +2,15 @@ cmake_minimum_required(VERSION 2.8.12)
 
 project(OpenCV-NEON-Compositor CXX)
 
+# Unit tests
+# ---------------------------------------------------------------------------- #
+
 enable_testing()
 find_package(GTest REQUIRED)
 include(GoogleTest)
+
+# External libraries
+# ---------------------------------------------------------------------------- #
 
 find_package(OpenCV)
 find_package(OpenMP)
@@ -22,4 +28,32 @@ if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86.*|x64.*|amd64|AMD64")
     target_compile_options(SSE4 INTERFACE -msse4 -DUSE_SSE4=1)
 endif()
 
+# Options
+# ---------------------------------------------------------------------------- #
+
+option(DISABLE_NEON "Disable NEON intrinsics" OFF)
+if (DISABLE_NEON)
+    add_compile_definitions(DISABLE_NEON)
+    message(STATUS "NEON disabled")
+endif()
+
+# Source code
+# ---------------------------------------------------------------------------- #
+
 add_subdirectory(src)
+
+# Examples
+# ---------------------------------------------------------------------------- #
+
+add_subdirectory(examples)
+
+# Documentation
+# ---------------------------------------------------------------------------- #
+
+find_package(Doxygen)
+
+if (DOXYGEN_FOUND)
+    add_custom_target(documentation 
+        Doxygen::doxygen
+        WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/doxygen")
+endif()

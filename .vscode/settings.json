@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.dox": "cpp",
         "iostream": "cpp",
         "cctype": "cpp",
         "clocale": "cpp",
@@ -52,7 +53,12 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "typeinfo": "cpp",
-        "bit": "cpp"
+        "bit": "cpp",
+        "iomanip": "cpp"
     },
-    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
+    "search.exclude": {
+        "build": true,
+        "docs": true,
+    }
 }

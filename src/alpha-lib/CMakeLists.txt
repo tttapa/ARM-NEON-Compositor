@@ -1,8 +1,9 @@
-add_library(alpha_lib overlay_alpha.cpp)
-target_include_directories(alpha_lib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
-target_compile_definitions(alpha_lib PRIVATE OVERLAY_ALPHA_DIV_256=0
-                                             OVERLAY_ALPHA_DIV_ROUND=1
-                                             OVERLAY_ALPHA_DIV_APPROX_ROUND=0)
+add_library(alpha_lib 
+    src/overlay_alpha.cpp)
+
+target_include_directories(alpha_lib 
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 if (TARGET OpenMP::OpenMP_CXX)
     target_link_libraries(alpha_lib PRIVATE OpenMP::OpenMP_CXX)
