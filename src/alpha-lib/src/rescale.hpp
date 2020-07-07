@@ -49,7 +49,7 @@ inline uint8x8_t div255_floor(uint16x8_t x) {
  * This is an approximation of a rounding division by 255, this is the
  * correct divisor, and it rounds the result correctly 99.80621337890625% of 
  * the time.
- * That is, the result is one unit too small in 127 out of all 2¹⁶ possible 
+ * That is, the result is one unit too large in 127 out of all 2¹⁶ possible 
  * input values.
  * 
  * This function is just as cheap as the @ref div255_floor function.
@@ -106,7 +106,7 @@ inline uint8x8_t div255_floor(uint16x8_t x) {
  * This is an approximation of a rounding division by 255, this is the
  * correct divisor, and it rounds the result correctly 99.80621337890625% of 
  * the time.
- * That is, the result is one unit too small in 127 out of all 2¹⁶ possible 
+ * That is, the result is one unit too large in 127 out of all 2¹⁶ possible 
  * input values.
  * 
  * This function is just as cheap as the @ref div255_floor function.

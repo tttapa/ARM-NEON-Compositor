@@ -90,12 +90,12 @@ TEST(overlay_alpha, rescale_div255_round_approx) {
     }
     std::vector<int8_t> differences(in.size());
     std::transform(std::begin(expected), std::end(expected), std::begin(result),
-                   std::begin(differences), std::minus<>());
-    auto errors = std::count_if(std::begin(differences), std::end(differences),
+                   differences.begin(), std::minus<>());
+    auto errors = std::count_if(differences.begin(), differences.end(),
                                 [](int8_t d) { return d != 0; });
     EXPECT_LE(errors, 127);
-    EXPECT_LE(*std::max(std::begin(differences), std::end(differences)), 1);
-    EXPECT_GE(*std::min(std::begin(differences), std::end(differences)), 0);
+    EXPECT_LE(*std::max_element(differences.begin(), differences.end()), 0);
+    EXPECT_GE(*std::min_element(differences.begin(), differences.end()), -1);
 }
 
 #endif
@@ -169,10 +169,10 @@ TEST(overlay_alpha, rescale_div255_round_approx_1) {
     }
     std::vector<int8_t> differences(in.size());
     std::transform(std::begin(expected), std::end(expected), std::begin(result),
-                   std::begin(differences), std::minus<>());
-    auto errors = std::count_if(std::begin(differences), std::end(differences),
+                   differences.begin(), std::minus<>());
+    auto errors = std::count_if(differences.begin(), differences.end(),
                                 [](int8_t d) { return d != 0; });
     EXPECT_LE(errors, 127);
-    EXPECT_LE(*std::max(std::begin(differences), std::end(differences)), 1);
-    EXPECT_GE(*std::min(std::begin(differences), std::end(differences)), 0);
+    EXPECT_LE(*std::max_element(differences.begin(), differences.end()), 0);
+    EXPECT_GE(*std::min_element(differences.begin(), differences.end()), -1);
 }
