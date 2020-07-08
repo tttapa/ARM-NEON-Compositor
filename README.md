@@ -1,7 +1,7 @@
 [![Build Status](https://github.com/tttapa/ARM-NEON-Compositor/workflows/CI%20Tests/badge.svg)](https://github.com/tttapa/ARM-NEON-Compositor/actions)
 [![GitHub](https://img.shields.io/github/stars/tttapa/ARM-NEON-Compositor?label=GitHub&logo=github)](https://github.com/tttapa/ARM-NEON-Compositor)
 
-# Raspberry Pi NEON Compositor
+# ARM/Raspberry Pi NEON Compositor
 
 Uses NEON SIMD instructions to overlay a foreground image with an alpha channel
 (transparency) over a background image really quickly.
