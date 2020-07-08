@@ -28,12 +28,13 @@ image, for example:
 
 ## Performance
 
-The following two graphs experiments compare the performance of overlaying one
-image onto another with GCC's `-O3` optimization level on the one hand, and with
-the hand-crafted NEON intrinsics on the other hand. Especially for small images,
-the difference in performance is huge, for larger images, memory throughput and
-caching effects starts to become more important factors than raw processing
-power.
+The following two graphs show the results of four experiments comparing the
+performance of overlaying one image onto another, using GCC's `-O3` optimization
+level on the one hand, and using hand-crafted NEON intrinsics on the other hand.
+Especially for small images, the NEON version is much faster.
+For larger images, memory throughput and caching effects start to become more
+important factors than raw processing power, but the NEON version is still 
+significantly faster than the version without intrinsics.
 
 | Small images | Large images |
 |:------------:|:------------:|
