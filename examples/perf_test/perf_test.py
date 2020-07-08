@@ -1,5 +1,38 @@
 #!/usr/bin/env python3.8
 
+"""!
+@example perf_test.py
+Test the performance of the `overlay_alpha*` functions with different sizes of
+random images.
+
+***
+
+The following two graphs show the results of four experiments comparing the
+performance of overlaying one image onto another, using GCC's `-O3` optimization
+level on the one hand, and using hand-crafted NEON intrinsics on the other hand.
+Especially for small images, the NEON version is much faster.
+For larger images, memory throughput and caching effects start to become more
+important factors than raw processing power, but the NEON version is still 
+significantly faster than the version without intrinsics.
+
+![Performance SIMD intrinsics small images](perf-small.svg)
+![Performance SIMD intrinsics large images](perf-large.svg)
+
+The difference between the different scaling and rounding modes is negligable.
+As expected, an exact rounding division by 255 is slowest. An approximation is
+slightly faster, because it eliminates a vector load instruction to load the
+rounding constant. An exact flooring division by 255 is a tiny bit faster still.
+
+The fastest option is to divide by 256 instead of 255, as both the rounding and
+flooring divisions by powers of two can be implemented using a single bit shift
+instruction.  
+This does result in a small error in the resulting image. Most notably, 
+combining two white pixels with color values `0xFF` will result in a slightly
+less white pixel, with color value `0xFE`.
+
+![Performance rescaling methods small images](perf-rescale-small.svg)
+"""
+
 import os.path as path
 import cv2
 import numpy as np
@@ -21,6 +54,10 @@ parser.add_argument('--max', dest='max_size', type=int, default=2000,
                     help='The size in pixels of the largest image in the test')
 parser.add_argument('--it', dest='max_iterations', type=int, default=10,
                     help='The number of test iterations for the largest images')
+parser.add_argument('--rescale', dest='rescale', choices=['div255_round', 
+                    'div255_round_approx', 'div255_floor', 'div256_round',
+                    'div256_floor'], default='div255_round',
+                    help='The number of test iterations for the largest images')
 args = parser.parse_args()
 print(args)
 
@@ -34,7 +71,7 @@ so += platform.machine()
 if not args.SIMD: so += "-no-simd"
 so += ".so"
 dll = ctypes.cdll.LoadLibrary(path.join(dir, so))
-overlay_alpha = dll.overlay_alpha_stride_div255_round
+overlay_alpha = dll['overlay_alpha_stride_' + args.rescale]
 overlay_alpha.argtypes = [
     uint8_t_p,  # bg_img
     uint8_t_p,  # fg_img
@@ -46,11 +83,11 @@ overlay_alpha.argtypes = [
 ]
 overlay_alpha.restype = void
 
-###
-
+# The different image sizes
 sizes = np.linspace(args.min_size, args.max_size, args.N, dtype=np.int)
 times = np.zeros((args.N, ))
 
+# Run the function for all sizes
 for i, size in enumerate(sizes):
     print(i + 1, '/', args.N, ':', size)
 
@@ -70,10 +107,13 @@ for i, size in enumerate(sizes):
     end_time = time.perf_counter()
     times[i] = (end_time - start_time) / iterations
 
+# Save the results as a CSV file
 results = np.column_stack((sizes, times))
-name = str(time.asctime()) + (' simd' if args.SIMD else ' no-simd')
+simd = (' simd ' if args.SIMD else ' no-simd ')
+name = str(time.asctime()) + simd + args.rescale + ' ' + platform.machine()
 np.savetxt(name + '.csv', results, delimiter=',')
 
+# Plot the results
 import matplotlib.pyplot as plt
 plt.plot(sizes, times, '.-')
 plt.xlabel('Image size [pixels]')
