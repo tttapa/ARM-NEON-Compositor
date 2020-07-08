@@ -25,3 +25,19 @@ image, for example:
 | Background | Foreground | Result |
 |:----------:|:----------:|:------:|
 | ![](doxygen/images/Machu-Picchu.thumb.jpg) | ![](doxygen/images/Overlay-Machu-Picchu.thumb.png) | ![](doxygen/images/Overlay-Machu-Picchu-Output.thumb.jpg) |
+
+## Performance
+
+The following two graphs experiments compare the performance of overlaying one
+image onto another with GCC's `-O3` optimization level on the one hand, and with
+the hand-crafted NEON intrinsics on the other hand. Especially for small images,
+the difference in performance is huge, for larger images, memory throughput and
+caching effects starts to become more important factors than raw processing
+power.
+
+| Small images | Large images |
+|:------------:|:------------:|
+| ![](doxygen/images/perf-small.svg) | ![](doxygen/images/perf-large.svg) |
+
+The experiments were carried out on a Raspberry Pi 3B+ running Ubuntu 20.04 
+(64-bit).
