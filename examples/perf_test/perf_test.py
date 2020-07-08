@@ -1,54 +1,55 @@
 #!/usr/bin/env python3.8
 
-"""!
-@example examples/perf_test/perf_test.py
-
-# Performance tests
-
-This example tests the performance of the `overlay_alpha*` functions with
-different sizes of random images.  
-Ctypes is used to dynamically load the `alpha-lib` library in Python.
-
-## SIMD intrinsics
-
-The following two graphs show the results of four experiments comparing the
-performance of overlaying one image onto another, using GCC's `-O3` optimization
-level on the one hand, and using hand-crafted NEON intrinsics on the other hand.
-Especially for small images, the NEON version is much faster.
-For larger images, memory throughput and caching effects start to become more
-important factors than raw processing power, but the NEON version is still 
-significantly faster than the version without intrinsics.
-
-<center>
-![Performance SIMD intrinsics small images](perf-small.svg)
-![Performance SIMD intrinsics large images](perf-large.svg)
-</center>
-
-## Rounding methods
-
-The difference between the different scaling and rounding methods is negligible.
-As expected, an exact rounding division by 255 is slowest. An approximation is
-slightly faster, because it eliminates a vector load instruction to load the
-rounding constant. An exact flooring division by 255 is a tiny bit faster still.
-
-The fastest option is to divide by 256 instead of 255, as both the rounding and
-flooring divisions by powers of two can be implemented using a single bit shift
-instruction.  
-This does result in a small error in the output image. Most notably, combining
-two white pixels with color values `0xFF` will result in a slightly less white 
-pixel, with color value `0xFE`.
-
-<center>
-![Performance rescaling methods small images](perf-rescale-small.svg)
-</center>
-
-This graph also clearly shows the slightly better performance when the image 
-size is a multiple of eight. The reason is the size of the NEON registers, which
-is four words, or eight 16-bit integers. When the number of columns of the 
-foreground image is not a multiple of eight, extra code is needed to process the
-last pixels of each row, resulting in lower performance.
-"""
-
+##
+# @example examples/perf_test/perf_test.py
+# 
+# # Performance tests
+# 
+# This example tests the performance of the `overlay_alpha*` functions with
+# different sizes of random images.  
+# Ctypes is used to dynamically load the `alpha-lib` library in Python.
+# 
+# ## SIMD intrinsics
+# 
+# The following two graphs show the results of four experiments comparing the
+# performance of overlaying one image onto another, using GCC's `-O3` 
+# optimization level on the one hand, and using hand-crafted NEON intrinsics on 
+# the other hand.
+# Especially for small images, the NEON version is much faster.
+# For larger images, memory throughput and caching effects start to become more
+# important factors than raw processing power, but the NEON version is still 
+# significantly faster than the version without intrinsics.
+# 
+# <center>
+# ![Performance SIMD intrinsics small images](perf-small.svg)
+# ![Performance SIMD intrinsics large images](perf-large.svg)
+# </center>
+# 
+# ## Rounding methods
+# 
+# The difference between the different scaling and rounding methods is 
+# negligible. As expected, an exact rounding division by 255 is slowest. An 
+# approximation is slightly faster, because it eliminates a vector load 
+# instruction to load the rounding constant. An exact flooring division by 255
+# is a tiny bit faster still.
+# 
+# The fastest option is to divide by 256 instead of 255, as both the rounding 
+# and flooring divisions by powers of two can be implemented using a single bit 
+# shift instruction.  
+# This does result in a small error in the output image. Most notably, combining
+# two white pixels with color values `0xFF` will result in a slightly less white 
+# pixel, with color value `0xFE`.
+# 
+# <center>
+# ![Performance rescaling methods small images](perf-rescale-small.svg)
+# </center>
+# 
+# This graph also clearly shows the slightly better performance when the image 
+# size is a multiple of eight. The reason is the size of the NEON registers, 
+# which is four words, or eight 16-bit integers. When the number of columns of 
+# the foreground image is not a multiple of eight, extra code is needed to 
+# process the last pixels of each row, resulting in lower performance.
+#
 import os.path as path
 import cv2
 import numpy as np
