@@ -28,6 +28,7 @@ h2.groupheader, .title, #projectname {
     font-family: 'Roboto', 'sans-serif';
     font-weight: 300;
 }
+div.contents > h1, div.contents > h2:not([class]),
 div.contents > div.textblock > h1 {
     border-bottom: 1px solid #c8d0e2;
     padding-bottom: 5px;
