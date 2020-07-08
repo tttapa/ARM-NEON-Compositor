@@ -1,3 +1,4 @@
+#include <alpha-lib/overlay_alpha.h>
 #include <alpha-lib/overlay_alpha.hpp>
 
 #include "SIMD.h"
@@ -20,20 +21,20 @@ static inline void overlay_alpha_1(const uint8_t *bg_img, const uint8_t *fg_img,
                                    uint8_t *out_img) {
     // Byte order: Blue, Green, Red, Alpha
     // Alpha [0, 255]
-    uint16_t alpha   = fg_img[3];
+    uint16_t alpha = fg_img[3];
     // Complement of Alpha [0, 255]
     uint16_t alpha_c = 255 - alpha;
-    // 255 * Red out = 
-    //     Red foreground * Alpha foreground 
+    // 255 * Red out =
+    //     Red foreground * Alpha foreground
     //   + Red background * (255 - Alpha foreground)
-    uint16_t r       = fg_img[2] * alpha + bg_img[2] * alpha_c;
-    out_img[2]       = rescale<rescale_type>(r);
-    uint16_t g       = fg_img[1] * alpha + bg_img[1] * alpha_c;
-    out_img[1]       = rescale<rescale_type>(g);
-    uint16_t b       = fg_img[0] * alpha + bg_img[0] * alpha_c;
-    out_img[0]       = rescale<rescale_type>(b);
+    uint16_t r = fg_img[2] * alpha + bg_img[2] * alpha_c;
+    out_img[2] = rescale<rescale_type>(r);
+    uint16_t g = fg_img[1] * alpha + bg_img[1] * alpha_c;
+    out_img[1] = rescale<rescale_type>(g);
+    uint16_t b = fg_img[0] * alpha + bg_img[0] * alpha_c;
+    out_img[0] = rescale<rescale_type>(b);
     // Alpha channel is not blended, Alpha background is simply copied to output
-    out_img[3]       = bg_img[3];
+    out_img[3] = bg_img[3];
 }
 
 /**
@@ -99,7 +100,7 @@ static void overlay_alpha_8(const uint8_t *bg_img, const uint8_t *fg_img,
 template <RescaleType rescale_type>
 void overlay_alpha_fast(const uint8_t *bg_img, const uint8_t *fg_img,
                         uint8_t *out_img, size_t n) {
-    // This fast version assumes that the number of pixels is a multiple of 8, 
+    // This fast version assumes that the number of pixels is a multiple of 8,
     // and that the size of the foreground and background images are the same.
     assert(n % 8 == 0);
 #pragma omp parallel for
@@ -123,18 +124,21 @@ template <RescaleType rescale_type>
 void overlay_alpha_stride(const uint8_t *bg_img, const uint8_t *fg_img,
                           uint8_t *out_img, size_t bg_full_cols, size_t fg_rows,
                           size_t fg_cols, size_t fg_full_cols) {
-    // In this case, the number of pixels doesn't need to be a multiple of 8, 
+    // In this case, the number of pixels doesn't need to be a multiple of 8,
     // and by using the right strides, the foreground and background images can
     // have different sizes.
     const size_t fg_rem_cols = fg_cols % 8;
 #pragma omp parallel for
     for (size_t r = 0; r < fg_rows; ++r) {
-        // Main loop to handle multiples of 8 pixels
-        for (size_t c = 0; c < fg_cols - 7; c += 8) {
-            size_t bg_offset = 4 * (r * bg_full_cols + c);
-            size_t fg_offset = 4 * (r * fg_full_cols + c);
-            overlay_alpha_8<rescale_type>(
-                &bg_img[bg_offset], &fg_img[fg_offset], &out_img[bg_offset]);
+        if (fg_cols >= 8) {
+            // Main loop to handle multiples of 8 pixels
+            for (size_t c = 0; c < fg_cols - 7; c += 8) {
+                size_t bg_offset = 4 * (r * bg_full_cols + c);
+                size_t fg_offset = 4 * (r * fg_full_cols + c);
+                overlay_alpha_8<rescale_type>(&bg_img[bg_offset],
+                                              &fg_img[fg_offset],
+                                              &out_img[bg_offset]);
+            }
         }
         // Handle the remaining columns (< 8)
         if (fg_rem_cols != 0) {
@@ -167,3 +171,41 @@ template void overlay_alpha_stride<RescaleType::Div256_Round>(
 template void overlay_alpha_stride<RescaleType::Div256_Floor>(
     const uint8_t *bg_img, const uint8_t *fg_img, uint8_t *out_img,
     size_t bg_full_cols, size_t fg_rows, size_t fg_cols, size_t fg_full_cols);
+
+// C wrappers
+extern "C" {
+void overlay_alpha_stride_div255_round(const uint8_t *bg_img,
+                                       const uint8_t *fg_img, uint8_t *out_img,
+                                       size_t bg_full_cols, size_t fg_rows,
+                                       size_t fg_cols, size_t fg_full_cols) {
+    overlay_alpha_stride<RescaleType::Div255_Round>(
+        bg_img, fg_img, out_img, bg_full_cols, fg_rows, fg_cols, fg_full_cols);
+}
+void overlay_alpha_stride_div255_round_approx(
+    const uint8_t *bg_img, const uint8_t *fg_img, uint8_t *out_img,
+    size_t bg_full_cols, size_t fg_rows, size_t fg_cols, size_t fg_full_cols) {
+    overlay_alpha_stride<RescaleType::Div255_Round_Approx>(
+        bg_img, fg_img, out_img, bg_full_cols, fg_rows, fg_cols, fg_full_cols);
+}
+void overlay_alpha_stride_div255_floor(const uint8_t *bg_img,
+                                       const uint8_t *fg_img, uint8_t *out_img,
+                                       size_t bg_full_cols, size_t fg_rows,
+                                       size_t fg_cols, size_t fg_full_cols) {
+    overlay_alpha_stride<RescaleType::Div255_Floor>(
+        bg_img, fg_img, out_img, bg_full_cols, fg_rows, fg_cols, fg_full_cols);
+}
+void overlay_alpha_stride_div256_round(const uint8_t *bg_img,
+                                       const uint8_t *fg_img, uint8_t *out_img,
+                                       size_t bg_full_cols, size_t fg_rows,
+                                       size_t fg_cols, size_t fg_full_cols) {
+    overlay_alpha_stride<RescaleType::Div256_Round>(
+        bg_img, fg_img, out_img, bg_full_cols, fg_rows, fg_cols, fg_full_cols);
+}
+void overlay_alpha_stride_div256_floor(const uint8_t *bg_img,
+                                       const uint8_t *fg_img, uint8_t *out_img,
+                                       size_t bg_full_cols, size_t fg_rows,
+                                       size_t fg_cols, size_t fg_full_cols) {
+    overlay_alpha_stride<RescaleType::Div256_Floor>(
+        bg_img, fg_img, out_img, bg_full_cols, fg_rows, fg_cols, fg_full_cols);
+}
+}
