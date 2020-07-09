@@ -1,6 +1,6 @@
 # Documentation
 
-View the online documentation at **https://tttapa.github.io/RPi-NEON-Compositor**.
+View the online documentation at **https://tttapa.github.io/ARM-NEON-Compositor**.
 
 ## Generate the documentation yourself
 
