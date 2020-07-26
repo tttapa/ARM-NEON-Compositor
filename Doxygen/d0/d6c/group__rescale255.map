@@ -1,0 +1,4 @@
+<map id="Rescale" name="Rescale">
+<area shape="rect" id="node1" href="$d6/d96/group__overlay__alpha.html" title="Functions for overlaying a foreground image with an alpha channel on top of a background channel." alt="" coords="5,5,109,31"/>
+<area shape="rect" id="node2" title="Functions to rescale the color values by dividing by 255." alt="" coords="157,5,228,31"/>
+</map>
