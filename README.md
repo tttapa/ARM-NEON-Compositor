@@ -6,12 +6,16 @@
 Uses NEON SIMD instructions to overlay a foreground image with an alpha channel
 (transparency) over a background image really quickly.
 
+For small images, it is up to **3.5 times faster** than an implementation without 
+NEON intrinsics, and for really large images, it is around 1.4 times faster.
+
 ## Documentation
 
 [**Documentation**](https://tttapa.github.io/ARM-NEON-Compositor/Doxygen/index.html)
 
 The [**modules**](https://tttapa.github.io/ARM-NEON-Compositor/Doxygen/modules.html)
-page is the best place to start.
+page is the best place to start. 
+The main function is [`overlay_alpha_stride`](https://tttapa.github.io/ARM-NEON-Compositor/Doxygen/d6/d96/group__overlay__alpha.html#ga1f0ae30bcf7b623123eff96cf2a40525).
 
 You can find more in-depth explanations of the NEON intrinsics used by this 
 library here: [**Raspberry-Pi/NEON**](https://tttapa.github.io/Pages/Raspberry-Pi/NEON/index.html).
@@ -41,4 +45,5 @@ significantly faster than the version without intrinsics.
 | ![](doxygen/images/perf-small.svg) | ![](doxygen/images/perf-large.svg) |
 
 The experiments were carried out on a Raspberry Pi 3B+ running Ubuntu 20.04 
-(64-bit).
+(64-bit).  
+More performance tests can be found in the [`perf_test`](https://tttapa.github.io/ARM-NEON-Compositor/Doxygen/dc/d46/examples_2perf_test_2perf_test_8py-example.html) example.
